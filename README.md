@@ -1,7 +1,7 @@
-# NetworkingProject
+
 # Simeon's and Masa's Final Project
 
-# final Project Proposal
+
 
 ## Project Title
 Mutli-Client Networking Quiz game
@@ -9,11 +9,11 @@ Mutli-Client Networking Quiz game
 ## Team members & roles in the project
 
 ### Simeon Gluzman: 
-multi-thread
+multi-thread,
 Github 
 ### Masakazu Yasumoto
-Chat server
-Client
+Chat server,
+Client,
 Github
 
 
