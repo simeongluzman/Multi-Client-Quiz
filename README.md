@@ -1,8 +1,8 @@
 # NetworkingProject
- Simeon's and Masa's Final Project
+# Simeon's and Masa's Final Project
 
-Final Project Proposal
-Project Title
+# final Project Proposal
+## Project Title
 Mutli-Client Networking Quiz game
 Team members & roles in the project
 Simeon Gluzman
