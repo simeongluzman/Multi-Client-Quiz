@@ -11,7 +11,7 @@ class Client {
 	public static void main(String[] args)
 	{
 		// establish a connection by providing host and port
-		// number
+		// number 2
 		
 		System.out.println("Please Enter your Username without Spaces");
 		Scanner nameScanner = new Scanner(System.in);

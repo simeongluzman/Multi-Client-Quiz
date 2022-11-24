@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -7,14 +6,15 @@ import java.util.HashMap;
 
 // Server class
 class Server {
-	
+
 	static HashMap<String, Integer> scores = new HashMap<>();
+	static ArrayList<ClientHandler> clientThreads = new ArrayList<>();
 	
-	public static void main(String[] args){
-		
+	
+
+	public static void main(String[] args) {
+
 		ServerSocket server = null;
-		
-		
 
 		try {
 
@@ -29,36 +29,28 @@ class Server {
 				// socket object to receive incoming client
 				// requests
 
-				
 				Socket client = server.accept();
-				
-				
+
 				// Displaying that new client is connected
 				// to server
-				System.out.println("New client connected"
-								+ client.getInetAddress()
-										.getHostAddress());
-				
-				
+				System.out.println("New client connected" + client.getInetAddress().getHostAddress());
 
 				// create a new thread object
-				ClientHandler clientSock
-					= new ClientHandler(client);
+				ClientHandler clientSock = new ClientHandler(client);
 
 				// This thread will handle the client
 				// separately
 				new Thread(clientSock).start();
+				
+				clientThreads.add(clientSock);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			if (server != null) {
 				try {
 					server.close();
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -67,62 +59,69 @@ class Server {
 
 	// ClientHandler class
 	private static class ClientHandler implements Runnable {
+		
 		private final Socket clientSocket;
+		PrintWriter output;
+		BufferedReader input;
 
 		// Constructor
-		public ClientHandler(Socket socket)
-		{
+		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
 		}
 
-		public void run()
-		{
-			PrintWriter out = null;
-			BufferedReader in = null;
+		public void run() {
+			
 			try {
-					
+
 				// get the outputstream of client
-				out = new PrintWriter(
-					clientSocket.getOutputStream(), true);
+				output = new PrintWriter(clientSocket.getOutputStream(), true);
 
 				// get the inputstream of client
-				in = new BufferedReader(
-					new InputStreamReader(
-						clientSocket.getInputStream()));
+				input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+				scores.put(input.readLine(), 0);
 				
-				
-				
-				scores.put(in.readLine(),0);
+				//
 				System.out.println(scores);
 				String line;
-				while ((line = in.readLine()) != null) {
+				
+				
+				while ((line = input.readLine()) != null) {
 
 					// writing the received message from
 					// client
-					System.out.printf(
-						" Sent from the client: %s\n",
-						line);
-					out.println(line);
+					System.out.printf(" Sent from the client: %s\n", line);
+					output.println(line);
 				}
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
-					if (out != null) {
-						out.close();
+					if (output != null) {
+						output.close();
 					}
-					if (in != null) {
-						in.close();
+					if (input != null) {
+						input.close();
 						clientSocket.close();
 					}
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+		
+		private void writeToAll(String out) {
+			
+			for (ClientHandler t: clientThreads) {
+				
+				output.println(out);
+				
+				
+				
+				
+			}
+			
+			
+		}
 	}
 }
-
