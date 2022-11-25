@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 // Server class
 class Server {
@@ -15,12 +16,13 @@ class Server {
 	public static void main(String[] args) {
 
 		ServerSocket server = null;
+		
 
 		try {
 
 			// server is listening on port 1234
 			server = new ServerSocket(1234);
-			server.setReuseAddress(true);
+			
 
 			// running infinite loop for getting
 			// client request
@@ -78,20 +80,27 @@ class Server {
 
 				// get the inputstream of client
 				input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				
 
 				scores.put(input.readLine(), 0);
 				
 				//
 				System.out.println(scores);
-				String line;
+				
+				BufferedReader kB
+				= new BufferedReader(new InputStreamReader(System.in));
+				String line = null;
 				
 				
-				while ((line = input.readLine()) != null) {
+				while (true) {
 
 					// writing the received message from
 					// client
-					System.out.printf(" Sent from the client: %s\n", line);
+					line = kB.readLine();
 					output.println(line);
+					System.out.printf(" Sent from the client: %s\n", input.readLine());
+					//output.println(line);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

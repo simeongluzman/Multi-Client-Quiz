@@ -13,9 +13,12 @@ class Client {
 		// establish a connection by providing host and port
 		// number 2
 		
+		
 		System.out.println("Please Enter your Username without Spaces");
 		Scanner nameScanner = new Scanner(System.in);
 		String uName = nameScanner.nextLine();
+		//nameScanner.close();
+		
 		
 		
 		
@@ -31,28 +34,29 @@ class Client {
 					socket.getInputStream()));
 
 			// object of scanner class
-			Scanner sc = new Scanner(System.in);
+			BufferedReader kB
+			= new BufferedReader(new InputStreamReader(System.in));
 			String line = null;
 			
 			out.println(uName);
 
-			while (!"exit".equalsIgnoreCase(line)) {
+			while (true) {
 				
+				System.out.println("Server wrote " + in.readLine());
 				// reading from user
-				line = sc.nextLine();
+				line = kB.readLine();
+				if (line == "q")
+					
+					break;
 
-				// sending the user input to server
+			
 				
 				out.println(line);
-				out.flush();
-
-				// displaying server reply
-				System.out.println("Server replied "
-								+ in.readLine());
+				
 			}
 			
 			// closing the scanner object
-			sc.close();
+			out.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
