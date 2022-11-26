@@ -4,7 +4,7 @@ import java.net.*;
 import java.util.*;
 
 // Client class
-class Client {
+class Admin {
 
 	// driver code
 
@@ -40,7 +40,7 @@ class Client {
 	                      
 	                    try {
 	                        
-	                        output.writeUTF('-' + userInput);
+	                        output.writeUTF('+' + userInput);
 	                        
 	                    } catch (IOException e) {
 	                        e.printStackTrace();
