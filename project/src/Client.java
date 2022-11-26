@@ -29,6 +29,8 @@ class Client {
     	DataOutputStream output = new DataOutputStream(serverSock.getOutputStream());
 		DataInputStream input = new DataInputStream(serverSock.getInputStream());
 		
+		output.writeUTF(uName);
+		
 		 Thread send = new Thread(new Runnable() 
 	        {
 	            @Override

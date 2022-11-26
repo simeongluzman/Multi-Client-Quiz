@@ -37,16 +37,20 @@ class Server {
 		while (true) {
 
 			client = server.accept();
+			
 			System.out.println("New client: " + client.getInetAddress());
 
 			DataOutputStream output = new DataOutputStream(client.getOutputStream());
 			DataInputStream input = new DataInputStream(client.getInputStream());
+			String name = input.readUTF();
 
-			ClientHandler clientSock = new ClientHandler(client, "user" + counter, output, input);
+			ClientHandler clientSock = new ClientHandler(client, name, output, input);
 			Thread t = new Thread(clientSock);
 			clientThreads.add(clientSock);
+			scores.put(name,0);
 			t.start();
-			counter++;
+			
+			System.out.println(scores);
 		}
 
 	}
