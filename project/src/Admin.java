@@ -1,123 +1,213 @@
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.* ;
+import java.net.* ;
+import java.util.* ;
 
 // Client class
-class Admin {
 
-	// driver code
-	
-	public static boolean flag = false;
-	final static int port = 1234;
-	static ArrayList<String> answers = new ArrayList<>();
-	static ArrayList<String> questions = new ArrayList<>();
-	static String question1 = "What is the capital of France? (1)-Paris  (2)-Monteppilier";
-	static String question2 = "What is the height of tajmahal?";
-	static String adminInput = "";
+/**
+ * 5 questions check answer keep score print username everytime print out score at
+ * the end allow client to type only 1, 2, 3, 4 end game + final scores send the
+ * client file to others
+ *
+ * @author Simeon Gluzman
+ * @version 1.0.0 2022-11-27 Initial implementation
+ */
+class Admin
+    {
 
-	public static void main(String[] args) throws IOException {
+    // driver code
 
-		questions.add(question1);
-		questions.add(question2);
-		System.out.println("Connecting to Server ...");
+    public static boolean flag = false ;
+    public static boolean typedNext = false ;
+    final static int port = 1234 ;
+    static ArrayList<String> userAnswers = new ArrayList<>() ;
+    static ArrayList<String> questions = new ArrayList<>() ;
+    static String question1 = "What is the capital of France?\n (1) Paris\n (2) Monteppilier \n (3) Hong Kong\n (4) Nice" ;
+    static String question2 = "What is the height of tajmahal (in meters)?\n (1) 1 \n (2) 24\n (3) 73\n (4) 274 " ;
+    static String question3 = "Which actor/actoress from Friends went to WIT? \n (1) Jennifer Anniston\n (2) Matthew Perry\n (3) David Schwimmer\n (4) Matt Leblanc  " ;
+    static String adminInput = "" ;
+    static HashMap<String, Integer> scores = new HashMap<>() ;
+    static HashMap<String, String> questionsAndAnswers = new HashMap<>() ;
+    static int currentIndex = 0 ;
+    static int currentScore = 0 ;
+    static String currentUserName = "";
 
-		Scanner kB = new Scanner(System.in);
+    public static void main( String[] args ) throws IOException
+        {
 
-		InetAddress ip = InetAddress.getByName("localhost");
+        questionsAndAnswers.put( question1, "1" ) ;
+        questions.add( question1 ) ;
+        questionsAndAnswers.put( question2, "3" ) ;
+        questions.add( question2 ) ;
+        questionsAndAnswers.put( question3, "4" ) ;
+        questions.add( question3 ) ;
 
-		// establish the connection
-		Socket serverSock = new Socket(ip, port);
+        System.out.println( "Connecting to Server ..." ) ;
 
-		DataOutputStream output = new DataOutputStream(serverSock.getOutputStream());
-		DataInputStream input = new DataInputStream(serverSock.getInputStream());
+        Scanner kB = new Scanner( System.in ) ;
 
-		Thread recieve = new Thread(new Runnable() {
+        InetAddress ip = InetAddress.getByName( "localhost" ) ;
 
-			@Override
-			public void run() {
+        // establish the connection
+        Socket serverSock = new Socket( ip, port ) ;
 
-				while (true) {
-					try {
-						// read the message sent to this client
-						String userInput = input.readUTF();
-						System.out.println(userInput);
-						if (flag) {
-							answers.add(userInput);
-							System.out.println(answers);
-						}
-							
+        DataOutputStream output = new DataOutputStream( serverSock.getOutputStream() ) ;
+        DataInputStream input = new DataInputStream( serverSock.getInputStream() ) ;
 
-					} catch (IOException e) {
+        Thread recieve = new Thread( new Runnable()
+            {
 
-						e.printStackTrace();
-					}
-				}
-			}
-		});
+            @Override
+            public void run()
+                {
 
-		Thread send = new Thread(new Runnable() {
+                while ( true )
+                    {
+                    try
+                        {
+                        if ( currentIndex >= questions.size() )
+                            {
+                            break ;
+                            }
+                        // read the message sent to this client
+                        String userInput = input.readUTF() ;
+                        System.out.println(userInput);
 
-			@Override
-			public void run() {
-				while (true) {
+                        String currentQuestion = questions.get( currentIndex++ ) ;
+                        String correctAnswer = questionsAndAnswers.get( currentQuestion ) ;
+                        
+                        String[] splitUserInput = userInput.split(" ");
+                        String username = splitUserInput[0];
+                        currentUserName = username;
+                        userInput = splitUserInput[1];
+                        
 
-					// read the message to deliver.
-					String userInput = kB.nextLine();
 
-					if (userInput.equals("start")) {
-						flag = true;
+                        // get rid of the username
+                        System.out.println(username);
 
-						for (String q : questions) {
-							try {
-								output.writeUTF('+' + q);
+                        // make sure the client types 1, 2, 3, or 4
+                        while ( !userInput.equals( "1" ) &&
+                                !userInput.equals( "2" ) &&
+                                !userInput.equals( "3" ) &&
+                                !userInput.equals( "4" ) )
+                            {
+                            output.writeUTF( username + " " + "Please enter 1, 2, 3, or 4: " ) ;
+                            userInput = input.readUTF() ;
+                            splitUserInput = userInput.split(" ");
+                            username = splitUserInput[0];
+                            userInput = splitUserInput[1];
+                            System.out.println(username);
 
-								while (!kB.hasNext()) {
+                            }
 
-									
+                        if ( userInput.equals( correctAnswer ) )
+                            {
+                            scores.put(username, scores.getOrDefault( username, 0 ) + 1);
+                            }
 
-								}
+                        System.out.println( userInput ) ;
 
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
+                        if ( flag )
+                            {
+                            userAnswers.add( userInput ) ;
+                            System.out.println( userAnswers ) ;
+                            }
 
-						continue;
+                        }
+                    catch ( IOException e )
+                        {
 
-					}
-					
-					
+                        e.printStackTrace() ;
+                        }
+                    }
+                }
+            } ) ;
 
-					try {
+        Thread send = new Thread( new Runnable()
+            {
 
-						output.writeUTF('+' + userInput);
+            @Override
+            public void run()
+                {
+                while ( true )
+                    {
 
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
+                    // read the message to deliver.
+                    String userInput = kB.nextLine() ;
 
-		send.start();
-		recieve.start();
+                    if ( userInput.equals( "start" ) )
+                        {
+                        flag = true ;
 
-	}
+                        for ( int i = 0 ; i < questions.size() ; i++ )
+                            {
+                            typedNext = false ;
+                            String question = questions.get( i ) ;
+                            try
+                                {
+                                output.writeUTF( '+' + question ) ;
 
-	public synchronized static void startGame(DataOutputStream out, DataInputStream in, Scanner scn)
-			throws IOException {
+                                while ( !typedNext )
+                                    {
+                                    if ( kB.nextLine().equals( "next" ) )
+                                        {
+                                        typedNext = true ;
+                                        }
+                                    }
+                                output.writeUTF( '+' + "Answer: " +
+                                                 questionsAndAnswers.get( question ) ) ;
 
-		out.writeUTF('+' + question1);
-		long t = System.currentTimeMillis();
-		long end = t + 15000;
-		while (System.currentTimeMillis() < end) {
-			System.out.println(in.readUTF());
+                                }
+                            catch ( IOException e1 )
+                                {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace() ;
+                                }
+                            }
 
-		}
+                        continue ;
 
-		System.out.println("Times up!");
+                        }
 
-	}
-}
+                    try
+                        {
+                        output.writeUTF( currentUserName + " " + "Your score: " + scores.get( currentUserName ) +
+                                         " / " + questionsAndAnswers.size() ) ;
+
+                        }
+                    catch ( IOException e )
+                        {
+                        e.printStackTrace() ;
+                        }
+                    }
+                }
+            } ) ;
+
+        send.start() ;
+        recieve.start() ;
+
+        }
+
+
+    public synchronized static void startGame( DataOutputStream out,
+                                               DataInputStream in,
+                                               Scanner scn )
+        throws IOException
+        {
+
+        out.writeUTF( '+' + question1 ) ;
+        long t = System.currentTimeMillis() ;
+        long end = t + 15000 ;
+        while ( System.currentTimeMillis() < end )
+            {
+            System.out.println( in.readUTF() ) ;
+
+            }
+
+        System.out.println( "Times up!" ) ;
+
+        }
+
+    }

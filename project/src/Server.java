@@ -8,9 +8,9 @@ import java.util.Scanner;
 // Server class
 class Server {
 
-	static HashMap<String, Integer> scores = new HashMap<>();
 	static ArrayList<ClientHandler> clientThreads = new ArrayList<>();
 	static ClientHandler adminPort;
+    static HashMap<String, ClientHandler> clients = new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
 		
@@ -19,6 +19,7 @@ class Server {
 		Socket client;
 		int counter = 1;
 		
+		// connect the admin
 		while (true) {
 			admin = server.accept();
 			System.out.println("Admin Connected");
@@ -34,6 +35,8 @@ class Server {
 			
 				
 		}
+		
+		// accepts clients 
 		while (true) {
 
 			client = server.accept();
@@ -43,14 +46,20 @@ class Server {
 			DataOutputStream output = new DataOutputStream(client.getOutputStream());
 			DataInputStream input = new DataInputStream(client.getInputStream());
 			String name = input.readUTF();
+			
+			System.out.println(name);
 
 			ClientHandler clientSock = new ClientHandler(client, name, output, input);
+			System.out.println(clientSock.userName);
+	         System.out.println(clientSock);
+
+			clients.put( clientSock.userName, clientSock );
+			
 			Thread t = new Thread(clientSock);
 			clientThreads.add(clientSock);
-			scores.put(name,0);
+			Admin.scores.put(name,0);
 			t.start();
 			
-			System.out.println(scores);
 		}
 
 	}

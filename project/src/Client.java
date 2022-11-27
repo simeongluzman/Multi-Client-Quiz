@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+
 // Client class
 class Client {
 
@@ -42,7 +43,7 @@ class Client {
 	                      
 	                    try {
 	                        
-	                        output.writeUTF('-' + userInput);
+	                        output.writeUTF('-' + uName + " " + userInput);
 	                        
 	                    } catch (IOException e) {
 	                        e.printStackTrace();
