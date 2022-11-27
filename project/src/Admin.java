@@ -23,15 +23,18 @@ class Admin
     final static int port = 1234 ;
     static ArrayList<String> userAnswers = new ArrayList<>() ;
     static ArrayList<String> questions = new ArrayList<>() ;
-    static String question1 = "What is the capital of France?\n (1) Paris\n (2) Monteppilier \n (3) Hong Kong\n (4) Nice" ;
-    static String question2 = "What is the height of tajmahal (in meters)?\n (1) 1 \n (2) 24\n (3) 73\n (4) 274 " ;
-    static String question3 = "Which actor/actoress from Friends went to WIT? \n (1) Jennifer Anniston\n (2) Matthew Perry\n (3) David Schwimmer\n (4) Matt Leblanc  " ;
+    static String question1 = "What is the capital of France?\n (1) Paris\n (2) Monteppilier \n (3) Hong Kong\n (4) Nice\n" ;
+    static String question2 = "What is the height of tajmahal (in meters)?\n (1) 1 \n (2) 24\n (3) 73\n (4) 274\n" ;
+    static String question3 = "Which actor/actoress from Friends went to WIT? \n (1) Jennifer Anniston\n (2) Matthew Perry\n (3) David Schwimmer\n (4) Matt Leblanc\n" ;
+    static String question4 = "What's the smallest country in the world?\n (1) North Korea\n (2) Monaco\n (3) Vatican City\n (4) Tuvalu\n" ;
+    static String question5 = "What does “www” stand for in a website browser??\n (1) Web Web Web\n (2) World Wide Web\n (3) Win Win Win\n (4) Wide World Web\n" ;
+
     static String adminInput = "" ;
     static HashMap<String, Integer> scores = new HashMap<>() ;
     static HashMap<String, String> questionsAndAnswers = new HashMap<>() ;
     static int currentIndex = 0 ;
     static int currentScore = 0 ;
-    static String currentUserName = "";
+    static String currentUserName = "" ;
 
     public static void main( String[] args ) throws IOException
         {
@@ -42,6 +45,10 @@ class Admin
         questions.add( question2 ) ;
         questionsAndAnswers.put( question3, "4" ) ;
         questions.add( question3 ) ;
+        questionsAndAnswers.put( question4, "3" ) ;
+        questions.add( question4 ) ;
+        questionsAndAnswers.put( question5, "2" ) ;
+        questions.add( question5 ) ;
 
         System.out.println( "Connecting to Server ..." ) ;
 
@@ -173,8 +180,9 @@ class Admin
 
                     try
                         {
-                        output.writeUTF( currentUserName + " " + "Your score: " + scores.get( currentUserName ) +
-                                         " / " + questionsAndAnswers.size() ) ;
+                        output.writeUTF( currentUserName + " " + "Your score: " +
+                                         scores.get( currentUserName ) + " / " +
+                                         questionsAndAnswers.size() ) ;
 
                         }
                     catch ( IOException e )
@@ -187,7 +195,6 @@ class Admin
 
         send.start() ;
         recieve.start() ;
-
         }
 
 

@@ -39,7 +39,7 @@ public class ClientHandler implements Runnable
             {
             try
                 {
-                inputLine = input.readUTF() ;
+                inputLine = this.input.readUTF() ;
                 System.out.println( inputLine ) ;
 
                 // add exit condition
@@ -70,12 +70,14 @@ public class ClientHandler implements Runnable
                     {
 
                     String[] splitUserInput = inputLine.split( " " ) ;
-                    //first word in inputLine is always the username if it's only for one specific client
+                    // first word in inputLine is always the username if it's only
+                    // for one specific client
                     String username = splitUserInput[ 0 ] ;
-                    //get rid of the username
-                    inputLine = inputLine.replace( username, "" ).substring(1);
+                    // get rid of the username
+                    inputLine = inputLine.replace( username, "" ).substring( 1 ) ;
 
-                    //find the correct ClientHandler using trhe hashmap and send the inputLine to the specified client 
+                    // find the correct ClientHandler using trhe hashmap and send the
+                    // inputLine to the specified client
                     Server.clients.get( username ).output.writeUTF( inputLine ) ;
                     }
 
