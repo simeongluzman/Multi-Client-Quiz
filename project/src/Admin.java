@@ -7,11 +7,14 @@ import java.util.*;
 class Admin {
 
 	// driver code
-	public static boolean act = true;
+	
+	public static boolean flag = false;
 	final static int port = 1234;
+	static ArrayList<String> answers = new ArrayList<>();
 	static ArrayList<String> questions = new ArrayList<>();
 	static String question1 = "What is the capital of France? (1)-Paris  (2)-Monteppilier";
 	static String question2 = "What is the height of tajmahal?";
+	static String adminInput = "";
 
 	public static void main(String[] args) throws IOException {
 
@@ -28,32 +31,6 @@ class Admin {
 
 		DataOutputStream output = new DataOutputStream(serverSock.getOutputStream());
 		DataInputStream input = new DataInputStream(serverSock.getInputStream());
-		
-		Thread play = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for (String q : questions) {
-					try {
-						output.writeUTF('+' + q);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					try {
-						while (!kB.nextLine().equals("end")) {
-
-							System.out.println(input.readUTF());
-
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		});
 
 		Thread recieve = new Thread(new Runnable() {
 
@@ -65,6 +42,12 @@ class Admin {
 						// read the message sent to this client
 						String userInput = input.readUTF();
 						System.out.println(userInput);
+						if (flag) {
+							answers.add(userInput);
+							System.out.println(answers);
+						}
+							
+
 					} catch (IOException e) {
 
 						e.printStackTrace();
@@ -77,18 +60,35 @@ class Admin {
 
 			@Override
 			public void run() {
-				while (act) {
+				while (true) {
 
 					// read the message to deliver.
 					String userInput = kB.nextLine();
 
 					if (userInput.equals("start")) {
-						
+						flag = true;
 
-						play.start();
-						act = false;
+						for (String q : questions) {
+							try {
+								output.writeUTF('+' + q);
+
+								while (!kB.hasNext()) {
+
+									
+
+								}
+
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+
+						continue;
 
 					}
+					
+					
 
 					try {
 
@@ -100,8 +100,6 @@ class Admin {
 				}
 			}
 		});
-
-		
 
 		send.start();
 		recieve.start();
