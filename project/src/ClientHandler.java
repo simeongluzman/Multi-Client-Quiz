@@ -44,8 +44,9 @@ public class ClientHandler implements Runnable
 
                 // add exit condition
 
-                if ( inputLine == "-exit" )
+                if ( inputLine == "-exit" || this.input.read()==-1)
                     {
+                	 System.out.println("closing connection!");
                     this.clientSocket.close() ;
                     break ;
                     }

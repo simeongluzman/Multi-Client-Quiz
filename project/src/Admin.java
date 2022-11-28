@@ -97,21 +97,8 @@ class Admin
                         // get rid of the username
                         System.out.println( username ) ;
 
-                        // make sure the client types 1, 2, 3, or 4
-                        while ( !userInput.equals( "1" ) &&
-                                !userInput.equals( "2" ) &&
-                                !userInput.equals( "3" ) &&
-                                !userInput.equals( "4" ) )
-                            {
-                            output.writeUTF( username + " " +
-                                             "Please enter 1, 2, 3, or 4: " ) ;
-                            userInput = input.readUTF() ;
-                            splitUserInput = userInput.split( " " ) ;
-                            username = splitUserInput[ 0 ] ;
-                            userInput = splitUserInput[ 1 ] ;
-                            System.out.println( username ) ;
-
-                            }
+                        
+                        
                         System.out.println("userInput: " + userInput);
                         System.out.println("correct: " + correctAnswer);
                         if ( userInput.equals( correctAnswer ) )
@@ -200,24 +187,5 @@ class Admin
         recieve.start() ;
         }
 
-
-    public synchronized static void startGame( DataOutputStream out,
-                                               DataInputStream in,
-                                               Scanner scn )
-        throws IOException
-        {
-
-        out.writeUTF( '+' + question1 ) ;
-        long t = System.currentTimeMillis() ;
-        long end = t + 15000 ;
-        while ( System.currentTimeMillis() < end )
-            {
-            System.out.println( in.readUTF() ) ;
-
-            }
-
-        System.out.println( "Times up!" ) ;
-
-        }
 
     }

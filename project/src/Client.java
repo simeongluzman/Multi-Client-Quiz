@@ -41,7 +41,13 @@ class Client
 
                     // read the message to deliver.
                     String userInput = kB.nextLine() ;
-
+                    /*
+                    if (!userInput.equals("1") && !userInput.equals("2") &&
+                    	!userInput.equals("3") && !userInput.equals("4")) {
+                    	System.out.print( "Please enter 1, 2, 3, or 4: " ) ;
+                    	continue;
+                    }
+                    */
                     // make sure the client types 1, 2, 3, or 4
                     while ( !userInput.equals( "1" ) && !userInput.equals( "2" ) &&
                             !userInput.equals( "3" ) && !userInput.equals( "4" ) )
@@ -49,6 +55,7 @@ class Client
                         System.out.print( "Please enter 1, 2, 3, or 4: " ) ;
                         userInput = kB.nextLine() ;
                         }
+                        
 
                     try
                         {
