@@ -34,7 +34,7 @@ class Admin
     static HashMap<String, String> questionsAndAnswers = new HashMap<>() ;
     static int currentIndex = 0 ;
     static int currentScore = 0 ;
-    static String currentUserName = "" ;
+    static HashSet<String> users = new HashSet<>() ;
 
     public static void main( String[] args ) throws IOException
         {
@@ -79,20 +79,23 @@ class Admin
                             }
                         // read the message sent to this client
                         String userInput = input.readUTF() ;
-                        System.out.println(userInput);
+                        System.out.println( userInput ) ;
 
-                        String currentQuestion = questions.get( currentIndex++ ) ;
+                        String currentQuestion = questions.get( currentIndex ) ;
                         String correctAnswer = questionsAndAnswers.get( currentQuestion ) ;
-                        
-                        String[] splitUserInput = userInput.split(" ");
-                        String username = splitUserInput[0];
-                        currentUserName = username;
-                        userInput = splitUserInput[1];
-                        
 
+                        String[] splitUserInput = userInput.split( " " ) ;
+                        String username = splitUserInput[ 0 ] ;
+                        userInput = splitUserInput[ 1 ] ;
+
+                        if ( !users.contains( username ) )
+                            {
+                            users.add( username ) ;
+                            scores.put( username, 0 ) ;
+                            }
 
                         // get rid of the username
-                        System.out.println(username);
+                        System.out.println( username ) ;
 
                         // make sure the client types 1, 2, 3, or 4
                         while ( !userInput.equals( "1" ) &&
@@ -100,26 +103,21 @@ class Admin
                                 !userInput.equals( "3" ) &&
                                 !userInput.equals( "4" ) )
                             {
-                            output.writeUTF( username + " " + "Please enter 1, 2, 3, or 4: " ) ;
+                            output.writeUTF( username + " " +
+                                             "Please enter 1, 2, 3, or 4: " ) ;
                             userInput = input.readUTF() ;
-                            splitUserInput = userInput.split(" ");
-                            username = splitUserInput[0];
-                            userInput = splitUserInput[1];
-                            System.out.println(username);
+                            splitUserInput = userInput.split( " " ) ;
+                            username = splitUserInput[ 0 ] ;
+                            userInput = splitUserInput[ 1 ] ;
+                            System.out.println( username ) ;
 
                             }
-
+                        System.out.println("userInput: " + userInput);
+                        System.out.println("correct: " + correctAnswer);
                         if ( userInput.equals( correctAnswer ) )
                             {
-                            scores.put(username, scores.getOrDefault( username, 0 ) + 1);
-                            }
-
-                        System.out.println( userInput ) ;
-
-                        if ( flag )
-                            {
-                            userAnswers.add( userInput ) ;
-                            System.out.println( userAnswers ) ;
+                            scores.put( username,
+                                        scores.getOrDefault( username, 0 ) + 1 ) ;
                             }
 
                         }
@@ -165,7 +163,7 @@ class Admin
                                     }
                                 output.writeUTF( '+' + "Answer: " +
                                                  questionsAndAnswers.get( question ) ) ;
-
+                                currentIndex++;
                                 }
                             catch ( IOException e1 )
                                 {
@@ -180,9 +178,14 @@ class Admin
 
                     try
                         {
-                        output.writeUTF( currentUserName + " " + "Your score: " +
-                                         scores.get( currentUserName ) + " / " +
-                                         questionsAndAnswers.size() ) ;
+
+                        for ( String user : users )
+                            {
+                            System.out.println(user + " " + scores.get( user ));
+                            output.writeUTF( user + " " + "Your score: " +
+                                             scores.get( user ) + " / " +
+                                             questionsAndAnswers.size() ) ;
+                            }
 
                         }
                     catch ( IOException e )
