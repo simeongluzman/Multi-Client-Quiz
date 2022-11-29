@@ -18,7 +18,7 @@ class Admin
 
     // driver code
 
-    public static boolean flag = false ;
+    
     public static boolean typedNext = false ;
     final static int port = 1234 ;
     static ArrayList<String> userAnswers = new ArrayList<>() ;
@@ -35,9 +35,12 @@ class Admin
     static int currentIndex = 0 ;
     static int currentScore = 0 ;
     static HashSet<String> users = new HashSet<>() ;
+    static boolean acceptAnswers;
 
     public static void main( String[] args ) throws IOException
         {
+    	
+    	
 
         questionsAndAnswers.put( question1, "1" ) ;
         questions.add( question1 ) ;
@@ -114,8 +117,9 @@ class Admin
 //                            }
                         System.out.println("userInput: " + userInput);
                         System.out.println("correct: " + correctAnswer);
-                        if ( userInput.equals( correctAnswer ) )
+                        if ( userInput.equals( correctAnswer ))
                             {
+                        	
                             scores.put( username,
                                         scores.getOrDefault( username, 0 ) + 1 ) ;
                             }
@@ -144,7 +148,7 @@ class Admin
 
                     if ( userInput.equals( "start" ) )
                         {
-                        flag = true ;
+                        
 
                         for ( int i = 0 ; i < questions.size() ; i++ )
                             {
@@ -152,7 +156,7 @@ class Admin
                             String question = questions.get( i ) ;
                             try
                                 {
-                                output.writeUTF( '+' + question ) ;
+                                output.writeUTF( '|' + question ) ;
 
                                 while ( !typedNext )
                                     {

@@ -10,6 +10,7 @@ class Client
     // driver code
 
     final static int port = 1234 ;
+    static boolean roundStarted = false;
 
     public static void main( String[] args ) throws IOException
         {
@@ -41,6 +42,11 @@ class Client
 
                     // read the message to deliver.
                     String userInput = kB.nextLine() ;
+                    
+                    if (!roundStarted) {
+                    	  System.out.println("round has not started or you already answered!");
+                    	  continue;
+                    }
 
                     // make sure the client types 1, 2, 3, or 4
                     while ( !userInput.equals( "1" ) && !userInput.equals( "2" ) &&
@@ -54,6 +60,7 @@ class Client
                         {
 
                         output.writeUTF( '-' + uName + " " + userInput ) ;
+                        roundStarted = false;
 
                         }
                     catch ( IOException e )
@@ -77,6 +84,11 @@ class Client
                         {
                         // read the message sent to this client
                         String userInput = input.readUTF() ;
+                        
+                        if (userInput.charAt(0)=='|') {
+                        	roundStarted = true;
+                        }
+                        
                         System.out.println( userInput ) ;
                         }
                     catch ( IOException e )

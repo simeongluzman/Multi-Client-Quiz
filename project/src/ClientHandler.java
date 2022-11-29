@@ -61,6 +61,14 @@ public class ClientHandler implements Runnable
                         client.output.writeUTF( inputLine.substring( 1 ) ) ;
 
                     }
+                else if ( inputLine.charAt( 0 ) == '|' )
+                {
+
+                for ( ClientHandler client : Server.clientThreads )
+
+                    client.output.writeUTF(inputLine) ;
+
+                }
 
                 else if ( inputLine.charAt( 0 ) == '-' )
                     {
