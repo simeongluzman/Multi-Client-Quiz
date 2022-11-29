@@ -128,7 +128,7 @@ class Admin
                     catch ( IOException e )
                         {
 
-                        e.printStackTrace() ;
+                        continue;
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 
 import java.io.DataInputStream ;
 import java.io.DataOutputStream ;
+import java.io.EOFException;
 import java.io.IOException ;
 
 import java.net.Socket ;
@@ -57,16 +58,40 @@ public class ClientHandler implements Runnable
                     {
 
                     for ( ClientHandler client : Server.clientThreads )
+                    	
+                    	try {
 
                         client.output.writeUTF( inputLine.substring( 1 ) ) ;
+                        
+                    	} catch (IOException e) {
+                    		client.output.close();
+                    		client.input.close();
+                    		Server.clientThreads.remove(client);
+                    		Server.clients.remove(client.userName);
+                    		System.out.println("User Disconnected");
+                    		
+                    	}
+                    
+                    
 
                     }
                 else if ( inputLine.charAt( 0 ) == '|' )
                 {
 
                 for ( ClientHandler client : Server.clientThreads )
+                	
+                	try {
 
                     client.output.writeUTF(inputLine) ;
+                
+	                } catch (IOException e) {
+	            		client.output.close();
+	            		client.input.close();
+	            		Server.clientThreads.remove(client);
+	            		Server.clients.remove(client.userName);
+	            		System.out.println("User Disconnected");
+	            		
+	            	}
 
                 }
 
@@ -86,16 +111,38 @@ public class ClientHandler implements Runnable
 
                     // find the correct ClientHandler using trhe hashmap and send the
                     // inputLine to the specified client
+                    try {
                     Server.clients.get( username ).output.writeUTF( inputLine ) ;
+                    
+                    } catch (IOException e) {
+                    	
+                    	Server.clients.get( username ).output.close();
+                    	Server.clients.get( username ).input.close();
+	            		Server.clientThreads.remove(Server.clients.get( username ));
+	            		
+	            		System.out.println("User Disconnected");
+                    	
+                    	
+                    }
+                    
+                    
+                    
                     }
 
                 }
 
             catch ( IOException e )
                 {
-                e.printStackTrace() ;
+                try {
+					
+					clientSocket.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
                 }
+            
 
             }
 
