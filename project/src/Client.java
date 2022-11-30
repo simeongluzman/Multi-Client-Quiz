@@ -21,7 +21,7 @@ class Client
 
         String uName = kB.nextLine() ;
 
-        InetAddress ip = InetAddress.getByName( "localhost" ) ;
+        String ip = "38.42.229.165";
 
         // establish the connection
         Socket serverSock = new Socket( ip, port ) ;
