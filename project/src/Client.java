@@ -15,7 +15,7 @@ class Client
     public static void main( String[] args ) throws IOException
         {
 
-        System.out.println( "Please Enter your Username without Spaces" ) ;
+        System.out.println( "Please Choose a username to use for the game! (No Spaces)" ) ;
 
         Scanner kB = new Scanner( System.in ) ;
 
@@ -44,7 +44,7 @@ class Client
                     String userInput = kB.nextLine() ;
                     
                     if (!roundStarted) {
-                    	  System.out.println("round has not started or you already answered!");
+                    	  System.out.println("Round has not started or you already sent an answer! Please Wait...");
                     	  continue;
                     }
 

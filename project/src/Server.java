@@ -59,8 +59,8 @@ class Server
                                                           name,
                                                           output,
                                                           input ) ;
-            System.out.println( clientSock.userName ) ;
-            System.out.println( clientSock ) ;
+            System.out.println("User Connected: " + clientSock.userName ) ;
+            
 
             clients.put( clientSock.userName, clientSock ) ;
 
