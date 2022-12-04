@@ -82,7 +82,7 @@ class Admin
                             }
                         // read the message sent to this client
                         String userInput = input.readUTF() ;
-                        System.out.println( userInput ) ;
+                        //System.out.println( userInput ) ;
 
                         String currentQuestion = questions.get( currentIndex ) ;
                         String correctAnswer = questionsAndAnswers.get( currentQuestion ) ;
@@ -97,25 +97,8 @@ class Admin
                             scores.put( username, 0 ) ;
                             }
 
-                        // get rid of the username
-                        System.out.println( username ) ;
-
-                        // make sure the client types 1, 2, 3, or 4
-//                        while ( !userInput.equals( "1" ) &&
-//                                !userInput.equals( "2" ) &&
-//                                !userInput.equals( "3" ) &&
-//                                !userInput.equals( "4" ) )
-//                            {
-//                            output.writeUTF( username + " " +
-//                                             "Please enter 1, 2, 3, or 4: " ) ;
-//                            userInput = input.readUTF() ;
-//                            splitUserInput = userInput.split( " " ) ;
-//                            username = splitUserInput[ 0 ] ;
-//                            userInput = splitUserInput[ 1 ] ;
-//                            System.out.println( username ) ;
-//
-//                            }
-                        System.out.println("userInput: " + userInput);
+                       
+                        System.out.println(username + " answered: " + userInput);
                         System.out.println("correct: " + correctAnswer);
                         if ( userInput.equals( correctAnswer ))
                             {
@@ -165,7 +148,7 @@ class Admin
                                         typedNext = true ;
                                         }
                                     }
-                                output.writeUTF( '+' + "Answer: " +
+                                output.writeUTF( '+' + "Correct Answer: " +
                                                  questionsAndAnswers.get( question ) ) ;
                                 currentIndex++;
                                 }
@@ -188,7 +171,8 @@ class Admin
                             System.out.println(user + " " + scores.get( user ));
                             output.writeUTF( user + " " + "Your score: " +
                                              scores.get( user ) + " / " +
-                                             questionsAndAnswers.size() ) ;
+                                             questionsAndAnswers.size()  + "\n" + 
+                                             "Game Over! Thank you for Playing");
                             }
 
                         }
